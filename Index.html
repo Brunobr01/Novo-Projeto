@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Escola</title>
+    <!-- Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <!-- Google Fonts para a tipografia semelhante ao Instagram -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card-panel {
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h4 {
+            font-weight: 500;
+            font-size: 24px;
+            color: #262626;
+        }
+        .input-field input, .input-field select {
+            font-size: 16px;
+            color: #262626;
+        }
+        .btn {
+            background-color: #3897f0;
+            width: 100%;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #318ce7;
+        }
+        .center-align a {
+            color: #3897f0;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        /* Estilo do modal */
+        .modal {
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .modal-content h5 {
+            font-weight: 500;
+            color: #262626;
+            font-size: 22px;
+        }
+        .modal .btn {
+            margin-top: 20px;
+        }
+        .input-field .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m6 offset-m3">
+                <div class="card-panel">
+                    <h4 class="center-align">Escola</h4>
+                    <form id="loginForm">
+                        <div class="input-field">
+                            <input type="text" id="username" required>
+                            <label for="username">Nome de usuário ou e-mail</label>
+                        </div>
+                        <div class="input-field" style="position: relative;">
+                            <input type="password" id="password" required>
+                            <label for="password">Senha</label>
+                            <span class="toggle-password" onclick="toggleLoginPassword()">Mostrar</span>
+                        </div>
+                        <button type="submit" class="btn waves-effect waves-light">Entrar</button>
+                    </form>
+                    <p class="center-align">Não tem uma conta? <a href="#modal1" class="modal-trigger">Inscreva-se</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h5>Cadastre-se</h5>
+            <form id="signupForm">
+                <div class="input-field">
+                    <input type="text" id="fullName" required>
+                    <label for="fullName">Nome completo</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="usernameSignup" required>
+                    <label for="usernameSignup">Nome de usuário</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="phoneEmail" required>
+                    <label for="phoneEmail">Número do celular ou e-mail</label>
+                </div>
+                <div class="input-field" style="position: relative;">
+                    <input type="password" id="newPassword" required>
+                    <label for="newPassword">Senha</label>
+                    <span class="toggle-password" onclick="toggleSignupPassword()">Mostrar</span>
+                </div>
+                <!-- Novo campo para cargo ou função -->
+                <div class="input-field">
+                    <select id="role" required>
+                        <option value="" disabled selected>Escolha seu cargo ou função</option>
+                        <option value="Mantenedor(a)">Mantenedor(a)</option>
+                        <option value="Diretor">Diretor</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Coordenador(a)">Coordenador(a)</option>
+                        <option value="Secretaria">Secretaria</option>
+                        <option value="Professor(a)">Professor(a)</option>
+                        <option value="T.I">T.I</option>
+                    </select>
+                    <label for="role">Seu cargo ou função na escola</label>
+                </div>
+                <button type="submit" class="btn waves-effect waves-light">Criar conta</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Custom JS para mostrar/ocultar senha e redirecionar -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems);
+            // Inicializa o seletor
+            var selectElems = document.querySelectorAll('select');
+            var selectInstances = M.FormSelect.init(selectElems);
+        });
+
+        function toggleLoginPassword() {
+            var passwordField = document.getElementById("password");
+            var toggleButton = document.querySelectorAll(".toggle-password")[0];
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleButton.textContent = "Ocultar";
+            } else {
+                passwordField.type = "password";
+                toggleButton.textContent = "Mostrar";
+            }
+        }
+
+        function toggleSignupPassword() {
+            var passwordField = document.getElementById("newPassword");
+            var toggleButton = document.querySelectorAll(".toggle-password")[1];
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleButton.textContent = "Ocultar";
+            } else {
+                passwordField.type = "password";
+                toggleButton.textContent = "Mostrar";
+            }
+        }
+
+        // Redireciona para o Dashboard ao clicar no botão Entrar
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita o comportamento padrão
+            window.location.href = 'Dashboard.html'; // Redireciona para a página Dashboard
+        });
+
+        // Redireciona para o Dashboard após a criação de conta
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita o comportamento padrão
+        alert('Conta criada com sucesso!'); // Exibe mensagem de sucesso
+        window.location.href = 'Dashboard.html'; // Redireciona diretamente para o Dashboard após cadastro
+    });
+    </script>
+</body>
+</html>

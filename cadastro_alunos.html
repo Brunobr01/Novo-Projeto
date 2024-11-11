@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Alunos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .sidebar {
+            width: 220px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #f5f5f5;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        .sidebar h5 {
+            margin: 0;
+            font-weight: 500;
+            font-size: 20px;
+        }
+        .sidebar ul {
+            padding-left: 0;
+        }
+        .sidebar ul li {
+            list-style: none;
+            margin: 10px 0;
+        }
+        .sidebar ul li a {
+            color: #3897f0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .sidebar ul li a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            margin-left: 240px;
+            padding: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* Define larguras fixas para as colunas */
+        #studentTableBody td:nth-child(1) { width: 15%; } /* Nome */
+        #studentTableBody td:nth-child(2) { width: 80px; text-align: center; } /* Data de Nascimento */
+        #studentTableBody td:nth-child(3) { width: 15%; } /* Email */
+        #studentTableBody td:nth-child(4) { width: 10%; } /* Telefone */
+        #studentTableBody td:nth-child(5) { width: 15%; } /* Curso */
+        #studentTableBody td:nth-child(6) { width: 10%; text-align: center; } /* Turma */
+        #studentTableBody td:nth-child(7) { width: 10%; } /* Matrícula */
+        #studentTableBody td:nth-child(8) { width: 50px; text-align: center; } /* Ações */
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h5>Olá, Bruno Brasil</h5>
+        <ul>
+            <li><a href="cadastro_alunos.html">Cadastro de Alunos</a></li>
+            <li><a href="#">Cadastro de Funcionários</a></li>
+            <li><a href="#">Gerenciamento de Turmas e Disciplinas</a></li>
+            <li><a href="#">Frequência e Faltas</a></li>
+            <li><a href="#">Notas e Avaliações</a></li>
+            <li><a href="#">Financeiro</a></li>
+            <li><a href="#">Comunicação</a></li>
+            <li><a href="#">Perfil do Usuário</a></li>
+            <li><a href="#">Relatórios e Estatísticas</a></li>
+            <li><a href="#">Cadastro de Materiais e Recursos</a></li>
+            <li><a href="#">Calendário Escolar</a></li>
+            <li><a href="#">Feedback e Avaliações</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <h4>Cadastro de Alunos</h4>
+        <button class="btn" id="addStudentBtn">Incluir novo cadastro</button>
+        <div id="formContainer" class="hidden">
+            <h5>Formulário de Cadastro de Aluno</h5>
+            <form method= "post" action="cadastro.php">
+                <div class="input-field">
+                    <input type="text" id="name" name="name" required>
+                    <label for="name">Nome</label>
+                </div>
+                <div class="input-field">
+                    <input type="date" id="dob" name="dob" required>
+                    <label for="dob">Data de Nascimento</label>
+                </div>
+                <div class="input-field">
+                    <input type="email" id="email" name="email" required>
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-field">
+                    <input type="tel" id="phone" name="phone" required>
+                    <label for="phone">Telefone</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="course" name="course" required>
+                    <label for="course">Curso</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="class" name="class" required>
+                    <label for="class">Turma</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="registration" name="registration" required>
+                    <label for="registration">Matrícula</label>
+                </div>
+                <button type="submit" class="btn">Salvar</button>
+            </form>
+        </div>
+
+        <h5>Alunos Cadastrados</h5>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th colspan="1"style="text-align: center;">Data de Nascimento</th>
+                    <th colspan="1"style="text-align: center;">Email</th>
+                    <th>Telefone</th>
+                    <th colspan="1"style="text-align: center;">Curso</th>
+                    <th>Turma</th>
+                    <th>Matrícula</th>
+                    <th colspan="3"style="text-align: center;">ações</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody">
+                <!-- As linhas de alunos serão adicionadas aqui -->
+            </tbody>
+        </table>
+
+        <!-- Modal para Visualização -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <h5>Visualizar Aluno</h5>
+                <p><strong>Nome:</strong> <span id="viewName"></span></p>
+                <p><strong>Data de Nascimento:</strong> <span id="viewDob"></span></p>
+                <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+                <p><strong>Telefone:</strong> <span id="viewPhone"></span></p>
+                <p><strong>Curso:</strong> <span id="viewCourse"></span></p>
+                <p><strong>Turma:</strong> <span id="viewClass"></span></p>
+                <p><strong>Matrícula:</strong> <span id="viewRegistration"></span></p>
+                <button class="btn red modal-close">Fechar</button>
+            </div>
+        </div>
+
+        <!-- Modal para Edição -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <h4>Editar Cadastro</h4>
+                <form id="editForm">
+                    <div class="input-field">
+                        <div class="input-field">
+                            <input type="text" id="name" name="Nome" required>
+                            <label for="name">Nome</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="date" id="dob" name="Data_de_Nascimento" required>
+                            <label for="dob">Data de Nascimento</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="email" id="email" name="Email" required>
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="tel" id="phone" name="Telefone" required>
+                            <label for="phone">Telefone</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="course" name="Curso" required>
+                            <label for="course">Curso</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="class" name="Turma" required>
+                            <label for="class">Turma</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="registration" name="Matricula" required>
+                            <label for="registration">Matrícula</label>
+                        </div>
+                        <button type="submit" class="btn">Salvar</button>
+                    <button type="button" class="btn red modal-close">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.modal').modal();
+
+            let students = [];
+            let currentIndex = -1;
+
+            $('#addStudentBtn').on('click', function() {
+                $('#formContainer').removeClass('hidden');
+                $('#studentForm')[0].reset();
+                currentIndex = -1; // Reset the index for new student
+            });
+
+            $('#cancelBtn').on('click', function() {
+                $('#formContainer').addClass('hidden');
+            });
+
+            $('#studentForm').on('submit', function(e) {
+                e.preventDefault();
+                const studentData = {
+                    name: $('#name').val(),
+                    dob: $('#dob').val(),
+                    email: $('#email').val(),
+                    phone: $('#phone').val(),
+                    course: $('#course').val(),
+                    class: $('#class').val(),
+                    registration: $('#registration').val()
+                };
+
+                if (currentIndex === -1) {
+                    students.push(studentData); // Add new student
+                } else {
+                    students[currentIndex] = studentData; // Edit existing student
+                }
+                updateStudentTable();
+                $('#formContainer').addClass('hidden');
+            });
+
+            function updateStudentTable() {
+                const studentTableBody = $('#studentTableBody');
+                studentTableBody.empty();
+
+                students.forEach((student, index) => {
+                    const row = `
+                        <tr>
+                            <td>${student.name}</td>
+                            <td>${new Date(student.dob).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                            <td>${student.email}</td>
+                            <td>${student.phone}</td>
+                            <td>${student.course}</td>
+                            <td>${student.class}</td>
+                            <td>${student.registration}</td>
+                            <td><button class="btn" onclick="editStudent(${index})">Editar</button></td>
+                            <td><button class="btn" onclick="viewStudent(${index})">Visualizar</button></td>
+                            <td><button class="btn red" onclick="deleteStudent(${index})">Apagar</button></td>
+                        </tr>
+                    `;
+                    studentTableBody.append(row);
+                });
+            }
+
+            window.editStudent = function(index) {
+                currentIndex = index;
+                const student = students[index];
+                $('#editName').val(student.name);
+                $('#editDob').val(student.dob);
+                $('#editEmail').val(student.email);
+                $('#editPhone').val(student.phone);
+                $('#editCourse').val(student.course);
+                $('#editClass').val(student.class);
+                $('#editRegistration').val(student.registration);
+                $('#editModal').modal('open');
+            };
+
+            $('#editForm').on('submit', function(e) {
+                e.preventDefault();
+                const editedData = {
+                    name: $('#editName').val(),
+                    dob: $('#editDob').val(),
+                    email: $('#editEmail').val(),
+                    phone: $('#editPhone').val(),
+                    course: $('#editCourse').val(),
+                    class: $('#editClass').val(),
+                    registration: $('#editRegistration').val()
+                };
+                students[currentIndex] = editedData; // Update the student data
+                updateStudentTable();
+                $('#editModal').modal('close');
+            });
+
+            window.viewStudent = function(index) {
+                const student = students[index];
+                $('#viewName').text(student.name);
+                $('#viewDob').text(student.dob);
+                $('#viewEmail').text(student.email);
+                $('#viewPhone').text(student.phone);
+                $('#viewCourse').text(student.course);
+                $('#viewClass').text(student.class);
+                $('#viewRegistration').text(student.registration);
+                $('#viewModal').modal('open');
+            };
+            window.deleteStudent=function(index){
+                students.splice(index,1);
+                updateStudentTable();
+            };
+        });
+    </script>
+</body>
+</html>
